@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Debo Cleaning Admin</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(0,255,200,.18), transparent 35%),
+        linear-gradient(135deg, #06111f, #0d2238);
+      color: white;
+      min-height: 100vh;
+      padding: 30px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 25px;
+      padding: 18px 22px;
+      backdrop-filter: blur(16px);
+      margin-bottom: 25px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+    }
+
+    a, button {
+      font-family: inherit;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 999px;
+      padding: 12px 18px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .primary {
+      background: #00ffd0;
+      color: #06111f;
+    }
+
+    .danger {
+      background: #ff4d6d;
+      color: white;
+    }
+
+    .dark {
+      background: rgba(255,255,255,.1);
+      color: white;
+      border: 1px solid rgba(255,255,255,.16);
+    }
+
+    .login-box, .booking-card {
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 28px;
+      padding: 24px;
+      backdrop-filter: blur(16px);
+    }
+
+    .login-box {
+      max-width: 430px;
+      margin: 80px auto;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.08);
+      color: white;
+      margin-bottom: 12px;
+      outline: none;
+      font-family: inherit;
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .bookings {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+
+    .booking-card h2 {
+      margin-top: 0;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 8px 13px;
+      border-radius: 999px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .Pending {
+      background: rgba(255, 210, 64, .18);
+      color: #ffd64d;
+    }
+
+    .Accepted {
+      background: rgba(0, 255, 208, .18);
+      color: #00ffd0;
+    }
+
+    .Declined {
+      background: rgba(255, 77, 109, .18);
+      color: #ff6b86;
+    }
+
+    .Quote {
+      background: rgba(97, 165, 255, .18);
+      color: #8ec2ff;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .small {
+      color: #aebed0;
+      line-height: 1.6;
+    }
+
+    #adminArea {
+      display: none;
+    }
+
+    #loginMessage {
+      color: #ff6b6b;
+    }
+
+    @media(max-width: 850px) {
+      body {
+        padding: 16px;
+      }
+
+      .bookings {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="loginArea" class="login-box">
+    <h1>Admin Login</h1>
+    <p class="small">Owner login for managing cleaning appointments.</p>
+
+    <input id="loginEmail" type="email" placeholder="Admin Email">
+    <input id="loginPassword" type="password" placeholder="Password">
+
+    <button class="btn primary" id="loginBtn">Login</button>
+    <p id="loginMessage"></p>
+  </div>
+
+  <div id="adminArea">
+    <div class="topbar">
+      <div>
+        <h1>Booking Dashboard</h1>
+        
+      </div>
+
+      <div>
+        <a href="index.html" class="btn dark" style="text-decoration:none;">View Website</a>
+        <a href="admin-gallery.html" class="btn dark" style="text-decoration:none;">Gallery Upload</a>
+        <button class="btn danger" id="logoutBtn">Logout</button>
+      </div>
+    </div>
+
+    <div id="bookings" class="bookings"></div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      signOut,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+    import {
+      getFirestore,
+      collection,
+      query,
+      orderBy,
+      onSnapshot,
+      doc,
+      updateDoc
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD-8CcPT5Kiw2JezxSPcHljBHufVKUDFLY",
+      authDomain: "debo-cleaning.firebaseapp.com",
+      projectId: "debo-cleaning",
+      storageBucket: "debo-cleaning.firebasestorage.app",
+      messagingSenderId: "561419239094",
+      appId: "1:561419239094:web:e6bf2e310ab06cf5b33017",
+      measurementId: "G-R3NQMR679X"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    emailjs.init("EMAILJS_PUBLIC_KEY");
+
+    const loginArea = document.getElementById("loginArea");
+    const adminArea = document.getElementById("adminArea");
+    const bookingsDiv = document.getElementById("bookings");
+    const loginMessage = document.getElementById("loginMessage");
+
+    document.getElementById("loginBtn").addEventListener("click", async () => {
+      const email = document.getElementById("loginEmail").value.trim();
+      const password = document.getElementById("loginPassword").value.trim();
+
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+      } catch (error) {
+        loginMessage.textContent = "Login failed. Check email and password.";
+      }
+    });
+
+    document.getElementById("logoutBtn").addEventListener("click", async () => {
+      await signOut(auth);
+    });
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        loginArea.style.display = "none";
+        adminArea.style.display = "block";
+        loadBookings();
+      } else {
+        loginArea.style.display = "block";
+        adminArea.style.display = "none";
+      }
+    });
+
+    function loadBookings() {
+      const q = query(collection(db, "bookings"), orderBy("createdAt", "desc"));
+
+      onSnapshot(q, (snapshot) => {
+        bookingsDiv.innerHTML = "";
+
+        if (snapshot.empty) {
+          bookingsDiv.innerHTML = "<p>No booking requests yet.</p>";
+          return;
+        }
+
+        snapshot.forEach((docSnap) => {
+          const booking = docSnap.data();
+          const id = docSnap.id;
+
+          const card = document.createElement("div");
+          card.className = "booking-card";
+
+          card.innerHTML = `
+            <span class="status ${booking.status === "Quote Sent" ? "Quote" : booking.status}">
+              ${booking.status || "Pending"}
+            </span>
+
+            <h2>${booking.name || "No Name"}</h2>
+
+            <p class="small">
+              <strong>Email:</strong> ${booking.email || ""}<br>
+              <strong>Phone:</strong> ${booking.phone || ""}<br>
+              <strong>Address:</strong> ${booking.address || ""}<br>
+              <strong>Service:</strong> ${booking.service || ""}<br>
+              <strong>Date:</strong> ${booking.date || ""}<br>
+              <strong>Time:</strong> ${booking.time || ""}<br>
+              <strong>Rooms:</strong> ${booking.rooms || ""}<br>
+              <strong>Notes:</strong> ${booking.notes || ""}
+            </p>
+
+            <input id="price-${id}" placeholder="Quote Price ex: 175">
+            <textarea id="message-${id}" placeholder="Message to customer"></textarea>
+
+            <div class="actions">
+              <button class="btn primary" data-action="accept" data-id="${id}">Accept</button>
+              <button class="btn danger" data-action="decline" data-id="${id}">Decline</button>
+              <button class="btn dark" data-action="quote" data-id="${id}">Send Price</button>
+            </div>
+          `;
+
+          bookingsDiv.appendChild(card);
+
+          card.querySelectorAll("button").forEach(btn => {
+            btn.addEventListener("click", () => {
+              const action = btn.dataset.action;
+              handleBookingAction(action, id, booking);
+            });
+          });
+        });
+      });
+    }
+
+    async function handleBookingAction(action, id, booking) {
+      const priceInput = document.getElementById(`price-${id}`);
+      const messageInput = document.getElementById(`message-${id}`);
+
+      const price = priceInput.value.trim();
+      const adminMessage = messageInput.value.trim();
+
+      let newStatus = "Pending";
+      let emailSubject = "";
+      let emailMessage = "";
+
+      if (action === "accept") {
+        newStatus = "Accepted";
+        emailSubject = "Your Cleaning Appointment Was Accepted";
+        emailMessage = adminMessage || `Your ${booking.service} appointment for ${booking.date} at ${booking.time} has been accepted.`;
+      }
+
+      if (action === "decline") {
+        newStatus = "Declined";
+        emailSubject = "Your Cleaning Appointment Was Declined";
+        emailMessage = adminMessage || `Sorry, we are unavailable for your requested cleaning appointment on ${booking.date}.`;
+      }
+
+      if (action === "quote") {
+        if (!price) {
+          alert("Please enter a price before sending a quote.");
+          return;
+        }
+
+        newStatus = "Quote Sent";
+        emailSubject = "Your Cleaning Service Quote";
+        emailMessage = adminMessage || `Your quote for ${booking.service} is $${price}. Please reply to confirm.`;
+      }
+
+      try {
+        await updateDoc(doc(db, "bookings", id), {
+          status: newStatus,
+          quotedPrice: price,
+          adminMessage: adminMessage,
+          updatedAt: new Date()
+        });
+
+        await sendCustomerEmail({
+          to_name: booking.name,
+          to_email: booking.email,
+          subject: emailSubject,
+          message: emailMessage,
+          service: booking.service,
+          date: booking.date,
+          time: booking.time,
+          price: price ? `$${price}` : ""
+        });
+
+        alert(`Booking marked as ${newStatus} and email sent.`);
+      } catch (error) {
+        console.error(error);
+        alert("Updated booking, but email may not have sent. Check your EmailJS setup.");
+      }
+    }
+
+    async function sendCustomerEmail(data) {
+      return emailjs.send(
+        "EMAILJS_SERVICE_ID",
+        "EMAILJS_TEMPLATE_ID",
+        data
+      );
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Debo's Cleaning Services</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  font-family:Poppins,sans-serif;
+  background:#06111f;
+  color:white;
+  overflow-x:hidden;
+}
+
+.hero{
+  min-height:100vh;
+  padding:28px 7% 90px;
+  background:
+    radial-gradient(circle at top left,rgba(0,255,208,.28),transparent 32%),
+    radial-gradient(circle at bottom right,rgba(0,110,255,.32),transparent 35%),
+    linear-gradient(135deg,#06111f,#0b2035 55%,#06111f);
+  position:relative;
+}
+
+/* NAVBAR */
+.navbar{
+  position:sticky;
+  top:18px;
+  z-index:9999;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:14px 22px;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:999px;
+  backdrop-filter:blur(20px);
+  box-shadow:0 20px 60px rgba(0,0,0,.25);
+}
+
+.nav-logo{
+  display:flex;
+  align-items:center;
+}
+
+.nav-logo img{
+  height:62px;
+  width:auto;
+  object-fit:contain;
+  filter:drop-shadow(0 0 18px rgba(0,255,208,.35));
+}
+
+.nav-links{
+  display:flex;
+  align-items:center;
+  gap:20px;
+}
+
+.nav-links a{
+  color:white;
+  text-decoration:none;
+  font-weight:800;
+  font-size:.95rem;
+}
+
+.nav-links a:hover{
+  color:#00ffd0;
+}
+
+.book-link{
+    background:#00ffd0 !important;
+    color:#06111f !important;
+  }
+
+.menu-btn{
+  display:none;
+  width:50px;
+  height:50px;
+  border:none;
+  border-radius:50%;
+  background:#00ffd0;
+  color:#06111f;
+  font-size:1.6rem;
+  font-weight:900;
+  cursor:pointer;
+}
+
+/* HERO */
+.hero-content{
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  gap:48px;
+  align-items:center;
+  padding-top:90px;
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 16px;
+  border-radius:999px;
+  background:rgba(0,255,208,.12);
+  border:1px solid rgba(0,255,208,.35);
+  color:#80ffea;
+  font-weight:800;
+  margin-bottom:20px;
+}
+
+h1{
+  font-size:clamp(2.8rem,7vw,6.2rem);
+  line-height:.94;
+  margin:0;
+  font-weight:900;
+  letter-spacing:-2px;
+}
+
+.hero p{
+  font-size:1.08rem;
+  color:#c7d5e5;
+  max-width:640px;
+  line-height:1.8;
+}
+
+.btns{
+  display:flex;
+  gap:14px;
+  margin-top:28px;
+  flex-wrap:wrap;
+}
+
+.btn{
+  padding:15px 22px;
+  border-radius:999px;
+  border:none;
+  font-weight:900;
+  cursor:pointer;
+  text-decoration:none;
+  display:inline-block;
+  font-family:inherit;
+}
+
+.primary{
+  background:#00ffd0;
+  color:#06111f;
+  box-shadow:0 0 30px rgba(0,255,208,.35);
+}
+
+.secondary{
+  background:rgba(255,255,255,.1);
+  color:white;
+  border:1px solid rgba(255,255,255,.18);
+}
+
+.hero-card{
+  background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:38px;
+  padding:24px;
+  backdrop-filter:blur(18px);
+  box-shadow:0 35px 90px rgba(0,0,0,.38);
+  transform:rotate(2deg);
+  position:relative;
+}
+
+.hero-card img{
+  width:100%;
+  height:430px;
+  object-fit:cover;
+  border-radius:30px;
+  background:#ddd;
+}
+
+.float-card{
+  position:absolute;
+  left:-30px;
+  bottom:35px;
+  background:rgba(6,17,31,.88);
+  border:1px solid rgba(255,255,255,.15);
+  padding:16px 18px;
+  border-radius:22px;
+  box-shadow:0 20px 50px rgba(0,0,0,.4);
+}
+
+.float-card strong{
+  color:#00ffd0;
+  font-size:1.4rem;
+}
+
+/* SECTIONS */
+section{
+  padding:85px 7%;
+}
+
+.section-title{
+  font-size:clamp(2rem,4vw,3.7rem);
+  margin:0 0 14px;
+  letter-spacing:-1px;
+}
+
+.section-sub{
+  color:#b8c7d9;
+  max-width:760px;
+  line-height:1.8;
+  margin-bottom:38px;
+}
+
+/* STATS */
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+  margin-top:50px;
+}
+
+.stat{
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:26px;
+  padding:24px;
+  text-align:center;
+}
+
+.stat h3{
+  color:#00ffd0;
+  font-size:2rem;
+  margin:0;
+}
+
+.stat p{
+  margin:6px 0 0;
+  color:#b8c7d9;
+}
+
+/* SERVICES */
+.services{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:18px;
+}
+
+.service-card,.owner-card,.booking-card,.review-card,.faq-card{
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:30px;
+  padding:25px;
+  backdrop-filter:blur(14px);
+  transition:.3s;
+}
+
+.service-card:hover{
+  transform:translateY(-7px);
+  border-color:rgba(0,255,208,.45);
+}
+
+.service-card h3{
+  margin-top:0;
+  color:#00ffd0;
+}
+
+.price{
+  font-size:1.9rem;
+  font-weight:900;
+  margin:16px 0;
+}
+
+/* GALLERY PREVIEW */
+.gallery{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+}
+
+.gallery img{
+  width:100%;
+  height:285px;
+  object-fit:cover;
+  border-radius:30px;
+  background:#ccc;
+}
+
+/* OWNER */
+.owner-card{
+  display:grid;
+  grid-template-columns:300px 1fr;
+  gap:30px;
+  align-items:center;
+}
+
+.owner-card img{
+  width:100%;
+  height:340px;
+  object-fit:cover;
+  border-radius:28px;
+  background:#ccc;
+}
+
+/* REVIEWS */
+.reviews{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+}
+
+.review-card .stars{
+  color:#ffd84d;
+  font-size:1.3rem;
+}
+
+/* FAQ */
+.faq-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:18px;
+}
+
+.faq-card h3{
+  color:#00ffd0;
+  margin-top:0;
+}
+
+/* FORM */
+form{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+}
+
+input,select,textarea{
+  width:100%;
+  padding:16px;
+  border-radius:17px;
+  border:1px solid rgba(255,255,255,.15);
+  background:rgba(255,255,255,.08);
+  color:white;
+  font-family:inherit;
+  outline:none;
+}
+
+input::placeholder,textarea::placeholder{
+  color:#98a7b8;
+}
+
+select option{
+  color:black;
+}
+
+textarea{
+  grid-column:span 2;
+  min-height:130px;
+  resize:vertical;
+}
+
+.full{
+  grid-column:span 2;
+}
+
+footer{
+  padding:34px 7%;
+  color:#99a9bc;
+  text-align:center;
+  border-top:1px solid rgba(255,255,255,.1);
+}
+
+.sticky-book{
+  display:none;
+}
+
+/* MOBILE */
+@media(max-width:900px){
+  .hero{
+    padding:18px 5% 70px;
+  }
+
+  .navbar{
+    border-radius:28px;
+    padding:12px 16px;
+  }
+
+  .nav-logo img{
+    height:54px;
+  }
+
+  .menu-btn{
+    display:block;
+  }
+
+  .nav-links{
+    position:fixed;
+    top:92px;
+    left:5%;
+    right:5%;
+    display:flex;
+    flex-direction:column;
+    align-items:stretch;
+    gap:12px;
+    padding:18px;
+    background:rgba(6,17,31,.97);
+    border:1px solid rgba(255,255,255,.14);
+    border-radius:28px;
+    backdrop-filter:blur(20px);
+    box-shadow:0 25px 70px rgba(0,0,0,.45);
+    opacity:0;
+    pointer-events:none;
+    transform:translateY(-14px);
+    transition:.25s ease;
+  }
+
+  .nav-links.active{
+    opacity:1;
+    pointer-events:auto;
+    transform:translateY(0);
+  }
+
+  .nav-links a{
+    padding:15px;
+    border-radius:18px;
+    background:rgba(255,255,255,.08);
+    text-align:center;
+    font-size:1rem;
+  }
+
+  .hero-content,.owner-card{
+    grid-template-columns:1fr;
+  }
+
+  .hero-content{
+    padding-top:60px;
+  }
+
+  .hero-card{
+    transform:none;
+  }
+
+  .hero-card img{
+    height:330px;
+  }
+
+  .float-card{
+    left:18px;
+    right:18px;
+    bottom:18px;
+  }
+
+  .services,.gallery,.reviews,.faq-grid,.stats{
+    grid-template-columns:1fr;
+  }
+
+  form{
+    grid-template-columns:1fr;
+  }
+
+  textarea,.full{
+    grid-column:span 1;
+  }
+
+  .sticky-book{
+    display:block;
+    position:fixed;
+    left:18px;
+    right:18px;
+    bottom:16px;
+    z-index:9998;
+    text-align:center;
+    padding:15px;
+    background:#00ffd0;
+    color:#06111f;
+    border-radius:999px;
+    font-weight:900;
+    text-decoration:none;
+    box-shadow:0 20px 50px rgba(0,0,0,.45);
+  }
+
+  footer{
+    padding-bottom:90px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="hero" id="home">
+
+  <nav class="navbar">
+    <a href="#home" class="nav-logo">
+      <img src="Logo.png" alt="Debo Cleaning Logo">
+    </a>
+
+    <div class="nav-links" id="navLinks">
+      <a href="#home">Home</a>
+      <a href="#services">Prices</a>
+      <a href="before-after.html">Pictures</a>
+      <a href="#owner">Owner</a>
+      
+      <a href="#book" class="book-link">Book Now</a>
+      
+    </div>
+
+    <button class="menu-btn" id="menuBtn">☰</button>
+  </nav>
+
+  <div class="hero-content">
+    <div>
+      <span class="badge">✨ Professional Cleaning Services</span>
+      <h1>Your Space, Our Priority!</h1>
+      <p>
+        Reliable, affordable home and business cleaning with care, quality, and attention to detail.
+        Book your request online and receive confirmation or a custom quote.
+      </p>
+
+      <div class="btns">
+        <a class="btn primary" href="#book">Book Now</a>
+        <a class="btn secondary" href="#services">View Prices</a>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <h3>100+</h3>
+          <p>Spaces Cleaned</p>
+        </div>
+        <div class="stat">
+          <h3>5★</h3>
+          <p>Service Goal</p>
+        </div>
+        <div class="stat">
+          <h3>24hr</h3>
+          <p>Quote Response</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-card">
+      <img src="images/work1.jpg" alt="Cleaning work">
+      <div class="float-card">
+        <strong>Fresh & Detailed</strong>
+        <br>
+        Residential • Office • Move-Out
+      </div>
+    </div>
+  </div>
+</div>
+
+<section id="services">
+  <h2 class="section-title">Services & Prices</h2>
+  <p class="section-sub">Prices may change depending on size, condition, add-ons, and travel distance.</p>
+
+  <div class="services">
+    <div class="service-card">
+      <h3>Standard Cleaning</h3>
+      <p>Basic home or apartment cleaning for regular upkeep.</p>
+      <div class="price">From $85</div>
+      <a class="btn secondary" href="#book">Book</a>
+    </div>
+
+    <div class="service-card">
+      <h3>Deep Cleaning</h3>
+      <p>Detailed cleaning for kitchens, bathrooms, floors, dusting, and more.</p>
+      <div class="price">From $150</div>
+      <a class="btn secondary" href="#book">Book</a>
+    </div>
+
+    <div class="service-card">
+      <h3>Move-In / Move-Out</h3>
+      <p>Perfect for renters, landlords, property managers, and new homes.</p>
+      <div class="price">From $200</div>
+      <a class="btn secondary" href="#book">Book</a>
+    </div>
+
+    <div class="service-card">
+      <h3>Office Cleaning</h3>
+      <p>Commercial and small business cleaning with custom pricing.</p>
+      <div class="price">Quote</div>
+      <a class="btn secondary" href="#book">Get Quote</a>
+    </div>
+  </div>
+</section>
+
+<section id="gallery">
+  <h2 class="section-title">Work Gallery</h2>
+  <p class="section-sub">Preview recent cleaning work or view the full before-and-after gallery.</p>
+
+  <div class="gallery">
+    <img src="images/work1.jpg" alt="Cleaning work 1">
+    <img src="images/work2.jpg" alt="Cleaning work 2">
+    <img src="images/work3.jpg" alt="Cleaning work 3">
+  </div>
+
+  <div class="btns">
+    <a class="btn primary" href="before-after.html">View Before & After</a>
+  </div>
+</section>
+
+<section id="owner">
+  <h2 class="section-title">Meet the Owner</h2>
+
+  <div class="owner-card">
+    <img src="images/owner.jpg" alt="Owner photo">
+
+    <div>
+      <h2>Debo</h2>
+      <p>
+        Debo started this cleaning service to help families, renters, homeowners, and business owners keep their spaces clean,
+        comfortable, and stress-free. He takes pride in being reliable, detailed, and treating every customer’s space with care.
+      </p>
+      <a class="btn primary" href="#book">Request a Cleaning</a>
+    </div>
+  </div>
+</section>
+
+<section id="reviews">
+  <h2 class="section-title">Customer Reviews</h2>
+  <p class="section-sub"></p>
+
+  <div class="reviews">
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+      <p>“Very professional and detailed. The house looked amazing.”</p>
+      <strong>- Customer</strong>
+    </div>
+
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+      <p>“Great communication and reliable service. Highly recommend.”</p>
+      <strong>- Customer</strong>
+    </div>
+
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+      <p>“Booking was easy and the cleaning was exactly what we needed.”</p>
+      <strong>- Customer</strong>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <h2 class="section-title">Frequently Asked Questions</h2>
+
+  <div class="faq-grid">
+    <div class="faq-card">
+      <h3>Do prices change?</h3>
+      <p>Yes. Final pricing can depend on home size, condition, add-ons, and distance.</p>
+    </div>
+
+    <div class="faq-card">
+      <h3>How does booking work?</h3>
+      <p>Submit the form, then the owner can accept, decline, or send a custom quote.</p>
+    </div>
+
+    <div class="faq-card">
+      <h3>Do you clean offices?</h3>
+      <p>Yes. Office cleanings are available by custom quote.</p>
+    </div>
+
+    <div class="faq-card">
+      <h3>Can I request a deep clean?</h3>
+      <p>Yes. Choose Deep Cleaning on the booking form and add notes about what you need.</p>
+    </div>
+  </div>
+</section>
+
+<section id="book">
+  <h2 class="section-title">Book a Cleaning</h2>
+  <p class="section-sub">Submit your request and the owner will accept, decline, or send you a custom quote.</p>
+
+  <div class="booking-card">
+    <form id="bookingForm">
+      <input id="name" placeholder="Full Name" required>
+      <input id="email" type="email" placeholder="Email Address" required>
+      <input id="phone" placeholder="Phone Number" required>
+      <input id="address" placeholder="Cleaning Address" required>
+
+      <select id="service" required>
+        <option value="">Select Service</option>
+        <option>Standard Cleaning</option>
+        <option>Deep Cleaning</option>
+        <option>Move-In / Move-Out Cleaning</option>
+        <option>Office Cleaning</option>
+        <option>Custom Cleaning</option>
+      </select>
+
+      <input id="date" type="date" required>
+      <input id="time" type="time" required>
+      <input id="rooms" placeholder="Rooms / Bathrooms">
+
+      <textarea id="notes" placeholder="Tell us about the job..."></textarea>
+
+      <button class="btn primary full" type="submit">Submit Booking Request</button>
+    </form>
+
+    <p id="formMessage"></p>
+  </div>
+</section>
+
+<footer>
+  © 2026 Debo Cleaning Services. All rights reserved.
+</footer>
+
+<a href="#book" class="sticky-book">Book Cleaning</a>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD-8CcPT5Kiw2JezxSPcHljBHufVKUDFLY",
+  authDomain: "debo-cleaning.firebaseapp.com",
+  projectId: "debo-cleaning",
+  storageBucket: "debo-cleaning.firebasestorage.app",
+  messagingSenderId: "561419239094",
+  appId: "1:561419239094:web:e6bf2e310ab06cf5b33017",
+  measurementId: "G-R3NQMR679X"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const bookingForm = document.getElementById("bookingForm");
+const formMessage = document.getElementById("formMessage");
+
+bookingForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const booking = {
+    name: document.getElementById("name").value.trim(),
+    email: document.getElementById("email").value.trim(),
+    phone: document.getElementById("phone").value.trim(),
+    address: document.getElementById("address").value.trim(),
+    service: document.getElementById("service").value,
+    date: document.getElementById("date").value,
+    time: document.getElementById("time").value,
+    rooms: document.getElementById("rooms").value.trim(),
+    notes: document.getElementById("notes").value.trim(),
+    status: "Pending",
+    quotedPrice: "",
+    adminMessage: "",
+    createdAt: serverTimestamp()
+  };
+
+  try {
+    await addDoc(collection(db, "bookings"), booking);
+    bookingForm.reset();
+    formMessage.textContent = "Your booking request was submitted successfully!";
+    formMessage.style.color = "#00ffd0";
+  } catch (error) {
+    console.error(error);
+    formMessage.textContent = "Something went wrong. Please try again.";
+    formMessage.style.color = "#ff6b6b";
+  }
+});
+</script>
+
+<script>
+const menuBtn = document.getElementById("menuBtn");
+const navLinks = document.getElementById("navLinks");
+
+menuBtn.addEventListener("click", () => {
+  navLinks.classList.toggle("active");
+  menuBtn.textContent = navLinks.classList.contains("active") ? "✕" : "☰";
+});
+
+document.querySelectorAll(".nav-links a").forEach(link => {
+  link.addEventListener("click", () => {
+    navLinks.classList.remove("active");
+    menuBtn.textContent = "☰";
+  });
+});
+</script>
+
+</body>
+</html>
